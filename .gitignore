@@ -1,3 +1,5 @@
 .venv/
 __pycache__/
 verilator/
+sim_build/
+dump.vcd
