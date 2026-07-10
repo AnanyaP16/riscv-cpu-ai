@@ -1,0 +1,8 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1783643846" />
+    <testcase name="add_test" classname="test_alu" file="/home/apadmanabhan2006/riscv-cpu-ai/testbench/alu/test_alu.py" lineno="5" time="0.03075718879699707" sim_time_ns="1001.0" ratio_time="32545.237037324136" />
+    <testcase name="default_test" classname="test_alu" file="/home/apadmanabhan2006/riscv-cpu-ai/testbench/alu/test_alu.py" lineno="19" time="0.00018858909606933594" sim_time_ns="2.0" ratio_time="10605.067003792668" />
+    <testcase name="zero_test" classname="test_alu" file="/home/apadmanabhan2006/riscv-cpu-ai/testbench/alu/test_alu.py" lineno="31" time="0.00017023086547851562" sim_time_ns="2.0" ratio_time="11748.750700280112" />
+  </testsuite>
+</testsuites>
