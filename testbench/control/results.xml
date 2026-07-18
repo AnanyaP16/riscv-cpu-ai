@@ -1,0 +1,6 @@
+<testsuites name="results">
+  <testsuite name="all" package="all">
+    <property name="random_seed" value="1784082594" />
+    <testcase name="control_test" classname="test_control" file="/home/apadmanabhan2006/riscv-cpu-ai/testbench/control/test_control.py" lineno="20" time="0.0008170604705810547" sim_time_ns="4.0" ratio_time="4895.598482637875" />
+  </testsuite>
+</testsuites>
