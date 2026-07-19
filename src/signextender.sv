@@ -14,7 +14,8 @@ logic [11:0] gathered_imm;
 
 always_comb begin
     case (imm_source)
-        1'b00: gathered_imm = raw_src[24:13]; // I-type
+        2'b00: gathered_imm = raw_src[24:13]; // I-type
+        2'b01: gathered_imm = {raw_src[24:18], raw_src[4:0]}; //S-type
         default: gathered_imm = 12'b0; // Default case, should not happen
     endcase
 end

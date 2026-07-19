@@ -1,7 +1,0 @@
-<testsuites name="results">
-  <testsuite name="all" package="all">
-    <property name="random_seed" value="1784350450" />
-    <testcase name="cpu_init_test" classname="test_cpu" file="/home/apadmanabhan2006/riscv-cpu-ai/testbench/cpu/test_cpu.py" lineno="27" time="0.002077817916870117" sim_time_ns="7.0" ratio_time="3368.918875502008" />
-    <testcase name="cpu_insrt_test" classname="test_cpu" file="/home/apadmanabhan2006/riscv-cpu-ai/testbench/cpu/test_cpu.py" lineno="54" time="0.00026488304138183594" sim_time_ns="3.999999999999999" ratio_time="15101.004500450043" />
-  </testsuite>
-</testsuites>

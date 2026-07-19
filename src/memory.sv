@@ -1,7 +1,8 @@
 //memory.sv
 
 module memory #(
-    parameter WORDS = 64
+    parameter WORDS = 64,
+    parameter mem_init = ""
 ) (
     input logic clk, 
     input logic [31:0] addr,
@@ -12,7 +13,6 @@ module memory #(
 
     output logic [31:0] read_data
 );
-
 /*
 Memory is byte addressed,
 so each individual byte of data(8bits) has its own unique physical address
@@ -23,6 +23,11 @@ but have no support for mis-aligned write or reads
 //localparam ADDR_BITS = $clog2(WORDS);   // <-- add this
 
 reg [31:0] mem [0:WORDS-1]; // memory array of 32 bit words
+
+//added for verification 
+initial begin 
+    $readmemh(mem_init, mem); // load mem for sim
+end
 
 //at rising clock edge this block is executed
 always @(posedge clk) begin

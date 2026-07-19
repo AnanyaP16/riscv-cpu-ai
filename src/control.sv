@@ -26,6 +26,12 @@ always_comb begin
             mem_write = 1'b0;
             alu_op = 2'b00;
         end
+        7'b0100011: begin 
+            reg_write = 1'b0;
+            imm_source= 2'b01;
+            mem_write = 1'b1;
+            alu_op = 2'b00;
+        end
         //Everything else
         default: begin
             reg_write = 1'b0;
