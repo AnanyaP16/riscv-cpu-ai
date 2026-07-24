@@ -86,3 +86,14 @@ async def cpu_insrt_test(dut):
     # check valu at test_address
     print(binary_to_hex(dut.data_memory.mem[test_address].value))
     assert binary_to_hex(dut.data_memory.mem[test_address].value) == "DEADBEEF"
+
+    # Add Test 
+    # lw x19 0x10(x0) (this memory spot contains 0x00000AAA)
+    # add x20 x18 x19
+
+    #expected result of reg 18 +reg 19 and store in reg 20
+    expected_result = (0xDEADBEEF +0x00000AAA) & 0xFFFFFFFF
+    await RisingEdge(dut.clk)
+    assert binary_to_hex(dut.regfile.registers[19].value) == "00000AAA" # ensure the right value was loaded from reg 19 
+    await RisingEdge(dut.clk)# add x20 x18 x19
+    assert binary_to_hex(dut.regfile.registers[20].value) == hex(expected_result)[2:].upper()
