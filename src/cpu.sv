@@ -67,6 +67,9 @@ wire [1:0] imm_source;
 wire reg_write;
 wire mem_write;
 
+wire alu_src;
+wire wb_src;
+
 control control_unit(
     //control inputs 
     .func3(func3),
@@ -79,7 +82,12 @@ control control_unit(
     //will be determined within the control.sv file depending on instruction
     .alu_control(alu_control),
     .imm_source(imm_source),
-    .mem_write(mem_write)
+    .mem_write(mem_write),
+
+    //additions for r-type (muxes out)
+    .alu_src(alu_src),
+    .wb_src(wb_src)
+
 );
 
 /**
@@ -100,7 +108,10 @@ wire [31:0] read_reg2;
 logic [31:0] write_back_data;
 always_comb begin : wbSelect
 //write back to cpu (write data) what was read from data memory
-    write_back_data = mem_read;
+    case (wb_src) 
+        1'b1: write_back_data = mem_read;
+        default : write_back_data = alu_result;
+    endcase
 end
 
 regfile regfile(
@@ -142,7 +153,10 @@ wire [31:0] alu_result;
 logic [31:0] alu_srcB;
 
 always_comb begin : srcBSelect
-    alu_srcB = immediate;
+    case (alu_src)
+        1'b1 :  alu_srcB = immediate;
+        default : alu_srcB = read_reg2;
+    endcase
 end
 alu alu_instc(
     .opA(read_reg1),

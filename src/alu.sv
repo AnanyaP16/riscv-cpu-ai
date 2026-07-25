@@ -12,6 +12,8 @@ always_comb begin
     case (alu_control)
         //basic case, of alu is 0 then add the two inputs
         3'b000: result = opA + opB; // ADD
+        3'b011: result = opA & opB; // ADD
+        3'b010: result = opA | opB; // OR
         default: result = 32'b0; // Default case, should not happen
     endcase
 end

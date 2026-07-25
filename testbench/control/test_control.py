@@ -66,3 +66,40 @@ async def r_add_control_test(dut):
     #datapass mux signals
     assert dut.alu_src.value == "0"
     assert dut.wb_src.value == "0"
+
+
+@cocotb.test()
+async def r_and_control_test(dut):
+    await set_unknown(dut)
+    # TEST CONTROL SIGNALS FOR R-type And
+    await Timer(10, units="ns")
+    dut.op.value = 0b0110011 #R-type
+    dut.func3.value = 0b111
+    await Timer(1, units="ns")
+    
+    assert dut.alu_control.value == "011" #and
+    #assert dut.imm_source.value == "01"
+    assert dut.mem_write.value == "0"
+    assert dut.reg_write.value == "1"
+
+    #datapass mux signals
+    assert dut.alu_src.value == "0"
+    assert dut.wb_src.value == "0"
+
+@cocotb.test()
+async def r_or_control_test(dut):
+    await set_unknown(dut)
+    # TEST CONTROL SIGNALS FOR R-type And
+    await Timer(10, units="ns")
+    dut.op.value = 0b0110011 #R-type
+    dut.func3.value = 0b110
+    await Timer(1, units="ns")
+    
+    assert dut.alu_control.value == "010" #or
+    #assert dut.imm_source.value == "01"
+    assert dut.mem_write.value == "0"
+    assert dut.reg_write.value == "1"
+
+    #datapass mux signals
+    assert dut.alu_src.value == "0"
+    assert dut.wb_src.value == "0"

@@ -31,6 +31,7 @@ always_comb begin
             wb_src = 1'b1;
             alu_op = 2'b00;
         end
+        //SW
         7'b0100011: begin 
             reg_write = 1'b0;
             imm_source= 2'b01;
@@ -38,6 +39,7 @@ always_comb begin
             mem_write = 1'b1;
             alu_op = 2'b00;
         end
+        //R-TYPE
         7'b0110011: begin 
             reg_write = 1'b1;
             alu_src = 1'b0;
@@ -65,7 +67,11 @@ always_comb begin
         2'b10 : begin
             case(func3)
                 // ADD -- will later add sub, with a different func7 value
-                3'b000  : alu_control = 3'b000;
+                3'b000 : alu_control = 3'b000;
+                //AND
+                3'b111 : alu_control = 3'b011;
+                //OR
+                3'b110 : alu_control = 3'b010;
                 default: alu_control = 3'b111;
             endcase
         end

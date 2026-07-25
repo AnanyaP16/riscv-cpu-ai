@@ -97,3 +97,25 @@ async def cpu_insrt_test(dut):
     assert binary_to_hex(dut.regfile.registers[19].value) == "00000AAA" # ensure the right value was loaded from reg 19 
     await RisingEdge(dut.clk)# add x20 x18 x19
     assert binary_to_hex(dut.regfile.registers[20].value) == hex(expected_result)[2:].upper()
+
+    # AND TEST
+    # and x21 x18 x20 (result shall be 0xDEAD8889)
+    # Use last expected result, as this instr uses last op result register
+    expected_result = expected_result & 0xDEADBEEF
+    await RisingEdge(dut.clk) # and x21 x18 x20
+    assert binary_to_hex(dut.regfile.registers[21].value) == "DEAD8889"
+
+    # OR TEST
+    # (Value pre-computed in python)
+    # lw x5 0x14(x0) | x5  <= 125F552D
+    # lw x6 0x18(x0) | x6  <= 7F4FD46A
+    # or x7 x5 x6    | x7  <= 7F5FD56F
+    print("\n\nTESTING OR\n\n")
+    expected_result = (0x125F552D | 0x7F4FD46A) & 0xFFFFFFFF
+    await RisingEdge(dut.clk) # lw x5 0x14(x0) | x5  <= 125F552D
+    assert binary_to_hex(dut.regfile.registers[5].value) == "125F552D"
+    await RisingEdge(dut.clk) # lw x6 0x18(x0) | x6  <= 7F4FD46A
+    assert binary_to_hex(dut.regfile.registers[6].value) == "7F4FD46A"
+    await RisingEdge(dut.clk) # or x7 x5 x6    | x7  <= 7F5FD56F
+    assert binary_to_hex(dut.regfile.registers[7].value) == "7F5FD56F"
+    assert binary_to_hex(dut.regfile.registers[7].value) == hex(expected_result)[2:].upper()
