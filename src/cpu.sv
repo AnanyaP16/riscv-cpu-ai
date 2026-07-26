@@ -13,7 +13,10 @@ reg [31:0] pc;
 logic [31:0] pc_next;
 
 always_comb begin : pcSelect
-    pc_next = pc + 4;
+    case(pc_src)
+        1'b1: pc_next = pc + immediate; 
+        default: pc_next = pc + 4;
+    endcase
 end
 
 always @(posedge clk) begin
@@ -69,7 +72,7 @@ wire mem_write;
 
 wire alu_src;
 wire wb_src;
-
+wire pc_src;
 control control_unit(
     //control inputs 
     .func3(func3),
@@ -86,7 +89,8 @@ control control_unit(
 
     //additions for r-type (muxes out)
     .alu_src(alu_src),
-    .wb_src(wb_src)
+    .wb_src(wb_src),
+    .pc_src(pc_src)
 
 );
 
@@ -165,6 +169,7 @@ alu alu_instc(
     .result(alu_result),
     .zero_flag (alu_zero)
 );
+
 
 /**
 *Data Memory

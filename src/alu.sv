@@ -14,6 +14,8 @@ always_comb begin
         3'b000: result = opA + opB; // ADD
         3'b011: result = opA & opB; // ADD
         3'b010: result = opA | opB; // OR
+        // 3'b001: Subtracts opB from opA using two's complement (opA + ~opB + 1)
+        3'b001: result = opA +(~opB + 1'b1);
         default: result = 32'b0; // Default case, should not happen
     endcase
 end

@@ -27,21 +27,32 @@ The long-term goal is to develop a simple RISC-V CPU core that supports basic in
 - waveforms/ - waveform output directory
 
 ## Current Progress
+The repository currently includes the following implemented components and their test coverage status:
 
-The repository currently includes:
+- `Program Counter` (`cpu.sv`): implemented and advancing by 4 each cycle.
+- `Instruction Memory` / `Data Memory` (`memory.sv`): implemented with parameterized word count and support for initializing from hex files (`test_imemory.hex`, `test_dmemory.hex`). Used by the CPU and exercisable from tests.
+- `Register File` (`regfile.sv`): implemented; read/write interface present. Exercised by the CPU tests.
+- `Sign Extender` (`signextender.sv`): implemented and used by the CPU immediate path.
+- `ALU` (`alu.sv`): implemented. Unit tests exist under `testbench/alu/test_alu.py` covering addition, default operation, and zero-flag behavior.
+- `Control Unit` (`control.sv`): skeleton/decoder implemented to produce `alu_control`, `imm_source`, `reg_write`, and `mem_write` signals. Tests are present under `testbench/control/`.
+- `CPU Top-level` (`cpu.sv`): datapath skeleton implemented with PC, imem, databack path (load/store example), register file integration, ALU hookup, and sign-extension. A Cocotb test (`testbench/cpu/test_cpu.py`) includes a `cpu_insrt_test` that validates a simple `lw`/`sw` datapath scenario (loads `DEADBEEF` into a register then stores it).
 
-- a basic CPU datapath with program counter logic
-- instruction memory and data memory modules
-- a register file and sign-extension unit
-- ALU and control-unit modules
-- initial Cocotb-based tests for the CPU and core components
-
-The CPU implementation is progressing from a simple skeleton toward a functional datapath for basic load/store-style instruction execution.
+Status summary: core datapath modules are present and unit-tested individually. The full CPU pipeline is in progress; basic load/store instruction flow is exercised by the existing CPU test, while some integration tests (for branches, full ISA support, and exception handling) are not yet implemented.
 
 ## Verification Status
 
-Tests are being developed under the testbench/ directory using Cocotb. The current work focuses on validating the individual modules first and then integrating them into the full CPU datapath.
+Verification is organized under `testbench/` with a Makefile per target (for example, `testbench/cpu/Makefile`) configured for Verilator + Cocotb. Current state:
+
+- Unit tests: `alu`, `regfile`, `memory`, `signextender`, and `control` have accompanying Cocotb tests (see their folders in `testbench/`).
+- CPU tests: `testbench/cpu/test_cpu.py` includes `cpu_insrt_test` for a load/store flow. An initialization/reset test is present but commented out for now.
+
 
 ## Notes
 
 This project is still under active development. The structure and implementation are expected to evolve as the CPU gains more functionality.
+
+## Next Steps / Roadmap
+
+- Complete and extend the `control` unit to cover additional RISC-V instruction types.
+- Expand `testbench/cpu` tests to validate branching and ALU instructions.
+- Implement and integrate an AI MAC unit once the scalar datapath is stable.

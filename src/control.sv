@@ -13,13 +13,15 @@ module control(
     output logic mem_write,
 
     output logic alu_src,
-    output logic wb_src //result_src (write back?)
+    output logic wb_src, //result_src (write back?)
+    output logic pc_src
 );
 
 /*
 Main Decoder
 */
 logic [1:0] alu_op;
+logic branch;
 always_comb begin
     case (op)
         //LW
@@ -30,6 +32,7 @@ always_comb begin
             mem_write = 1'b0;
             wb_src = 1'b1;
             alu_op = 2'b00;
+            branch = 1'b0;
         end
         //SW
         7'b0100011: begin 
@@ -38,6 +41,7 @@ always_comb begin
             alu_src = 1'b1;
             mem_write = 1'b1;
             alu_op = 2'b00;
+            branch = 1'b0;
         end
         //R-TYPE
         7'b0110011: begin 
@@ -46,6 +50,16 @@ always_comb begin
             mem_write = 1'b0;
             wb_src = 1'b0;
             alu_op = 2'b10;
+            branch = 1'b0;
+        end
+        //BEQ
+        7'b1100011: begin 
+            reg_write = 1'b0;
+            imm_source= 2'b10;
+            alu_src = 1'b0;
+            mem_write = 1'b0;
+            alu_op = 2'b01;
+            branch = 1'b1;
         end
         //Everything else
         default: begin
@@ -53,6 +67,9 @@ always_comb begin
             imm_source = 2'b00;
             mem_write = 1'b0;
             alu_op = 2'b00;
+            alu_src = 1'b0;
+            branch = 1'b0;
+            wb_src = 1'b0;
         end
     endcase
 end
@@ -64,6 +81,7 @@ always_comb begin
     case (alu_op)
         //LW, SW
         2'b00 : alu_control = 3'b000;
+        2'b01 : alu_control = 3'b001;
         2'b10 : begin
             case(func3)
                 // ADD -- will later add sub, with a different func7 value
@@ -78,5 +96,7 @@ always_comb begin
         default: alu_control = 3'b111;
     endcase
 end
+
+assign pc_src = (alu_zero & (op == 7'b1100011));
 
 endmodule
